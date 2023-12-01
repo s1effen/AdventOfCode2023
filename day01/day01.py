@@ -69,42 +69,6 @@ def part2(data):
                 break
     print("Answer: {}".format(calibration))
 
-def part2a(data):
-    print("\n---------------------------\nPart2:\n---------------------------")
-    calibration = 0
-    digits = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
-    for d in data:
-        first = -1
-        last = -1
-        #print(d)
-        for i in range(1, int(len(d)) + 1):
-            val = str(d[0:i])
-            for idx,n in enumerate(digits):
-                if val.find(n) != -1:
-                    s = d.find(n)
-                    d = d[:s] + n + str(idx+1) + n + d[s+len(n):]
-                    #print("replaced {} : {}".format(n,d))
-            val = d[-i:]
-            for idx,n in enumerate(digits): #Reverse
-                if val.rfind(n) != -1:
-                    s = d.rfind(n)
-                    #print("{}.rfind({}) = {}".format(val,n,s))
-                    d = d[:s] + n + str(idx+1) + n + d[s+len(n):]
-                    #print("replaced {} : {}".format(n,d))
-        for i in range(1, int(len(d)) + 1):
-            if first == -1 and d[i - 1].isdigit():
-                # print(d[i-1])
-                first = d[i - 1]
-            if last == -1 and d[-i].isdigit():
-                # print(d[-i])
-                last = d[-i]
-            if first != -1 and last != -1:
-                print("Calibration value is {}{}".format(first, last))
-                calibration += int("{}{}".format(first, last))
-                break
-    print("Answer: {}".format(calibration))
-
-
 def run(day, test=False):
     if test:
         data1 = input("day" + day + "/test1.txt")
