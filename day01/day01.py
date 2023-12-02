@@ -1,8 +1,5 @@
 import sys
 
-data = []
-
-
 def input(f):
     d = []
     with open(f, "r") as f:
@@ -33,6 +30,7 @@ def part1(data):
                 break
     print("Answer: {}".format(calibration))
 
+
 def part2(data):
     print("\n---------------------------\nPart2:\n---------------------------")
     calibration = 0
@@ -40,34 +38,35 @@ def part2(data):
     for d in data:
         first = -1
         last = -1
-        #print(d)
+        # print(d)
         for i in range(1, int(len(d)) + 1):
             val = str(d[0:i])
-            #print("val from left {}".format(val))
+            # print("val from left {}".format(val))
             if first == -1:
                 if val[-1].isdigit():
                     first = d[i - 1]
-                    #print("set first to {}".format(first))
+                    # print("set first to {}".format(first))
                 else:
-                    for idx,n in enumerate(digits):
+                    for idx, n in enumerate(digits):
                         if val.find(n) != -1:
-                            first = idx +1
+                            first = idx + 1
 
             val = str(d[-i:])
-            #print("val from right {}".format(val))
+            # print("val from right {}".format(val))
             if last == -1:
                 if val[0].isdigit():
                     last = d[-i]
-                    #print("set last to {}".format(first))
+                    # print("set last to {}".format(first))
                 else:
-                    for idx,n in enumerate(digits): #Reverse
+                    for idx, n in enumerate(digits):  # Reverse
                         if val.rfind(n) != -1:
-                            last = idx +1
+                            last = idx + 1
             if first != -1 and last != -1:
                 print("Calibration value is {}{}".format(first, last))
                 calibration += int("{}{}".format(first, last))
                 break
     print("Answer: {}".format(calibration))
+
 
 def run(day, test=False):
     if test:
