@@ -37,7 +37,7 @@ def part2(data):
     answer = 0
     # iterate over cards by number
     for i in range(1, len(data)):
-        print("Card {}".format(i))
+        #print("Card {}".format(i))
         matches = 0
         for num in data[i][1][1]:
             if num in data[i][1][0]:
