@@ -26,7 +26,7 @@ def part2(data):
         True
     end_time = time.time()
     print("Answer: {}".format(42))
-    print("Execution took {} milliseconds".format((end_time-start_time)* 1000))
+    print("Execution took {} seconds".format((end_time-start_time)* 1000))
 
 def run(day,test=False):
     if test:
