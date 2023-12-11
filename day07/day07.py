@@ -127,7 +127,7 @@ def part2(data):
 def run(day, test=False):
     if test:
         data1 = input("day" + day + "/test1.txt")
-        data2 = input("day" + day + "/test2.txt")
+        data2 = input("day" + day + "/test1.txt")
         part1(data1)
         part2(data2)
     else:

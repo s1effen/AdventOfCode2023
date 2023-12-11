@@ -7,5 +7,4 @@ def run(day=date.today().day, test=False):
     print("######################################################")
     run = getattr(import_module("day{:02d}.day{:02d}".format(day, day)), "run")
     run("{:02d}".format(day), test)
-
-run(7,test=False)
+run(test=False)
