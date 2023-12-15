@@ -23,19 +23,19 @@ def smudge(field):
                 fieldcopy[y][x] = '.'
             else:
                 fieldcopy[y][x] = '#'
-            changed = checkmirror(fieldcopy, 'h'), checkmirror(fieldcopy, 'v')
+            changed = checkmirror(fieldcopy, 'h', unchanged[0]), checkmirror(fieldcopy, 'v', unchanged[1])
             if changed[0] > 0 and changed[0] != unchanged[0]:
                 print("Old: {} New: {}".format(unchanged, changed))
-                print(max(changed))
+                #print(changed[0])
                 return changed[0]*100
             if changed[1] > 0 and changed[1] != unchanged[1]:
                 print("Old: {} New: {}".format(unchanged, changed))
-                print(max(changed))
+                #print(changed[1])
                 return changed[1]
-    print("No new reflection found")
+    print("No new reflection found: {}".format(unchanged))
     return 0
 
-def checkmirror(field,direction='v'):
+def checkmirror(field,direction='v', old=None):
     if direction == 'v':
         for i in range(1,field.shape[1]):
             if i < field.shape[1]/2:
@@ -45,8 +45,12 @@ def checkmirror(field,direction='v'):
             #print("Left with mirror at {} position {} with size {}:\n {}".format(i,direction,l,field[:, i-l:i]))
             #print("Right with mirror at {} position {} with size {}:\n {}".format(i,direction ,l,np.flip(field[:, i:i+l],1)))
             if np.array_equal(field[:, i-l:i],np.flip(field[:, i:i+l],1)):
-                #print("Vertical reflection between {} and {}".format(i,i+1))
-                return i
+                if old and i == old:
+                    #print("Old vertical reflection between {} and {}. Continue".format(i, i+1))
+                    continue
+                else:
+                    #print("Vertical reflection between {} and {}".format(i,i+1))
+                    return i
     if direction == 'h':
         for i in range(1, field.shape[0]):
             if i < field.shape[0] / 2:
@@ -56,8 +60,12 @@ def checkmirror(field,direction='v'):
             #print("Top with mirror at {} position {} with size {}:\n {}".format(i,direction,l,field[i-l:i,:]))
             #print("Bottom with mirror at {} position {} with size {}:\n {}".format(i,direction ,l,np.flip(field[i:i+l,:],0)))
             if np.array_equal(field[i - l:i, :], np.flip(field[i:i + l,:], 0)):
-                #print("Horizontal reflection between {} and {}".format(i, i + 1))
-                return i
+                if old and i == old:
+                    #print("Old horizontal reflection between {} and {}. Continue".format(i, i + 1))
+                    continue
+                else:
+                    #print("Horizontal reflection between {} and {}. Return.".format(i, i + 1))
+                    return i
     return 0
 
 def part1(data):
