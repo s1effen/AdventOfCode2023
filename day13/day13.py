@@ -1,37 +1,92 @@
 import sys
-import time
+import numpy as np
 
 def input(f):
     d = []
+    temp = []
     with open(f, "r") as f:
         for index,line in enumerate(f):
-            if line.strip():
-                d.append(line.strip())
+            if line.strip() != "":
+                temp.append(list(line.strip()))
             else:
-                False
+                d.append(np.array(temp))
+                temp = []
+    d.append(np.array(temp))
     return d
+
+def smudge(field):
+    unchanged = checkmirror(field, 'h'), checkmirror(field, 'v')
+    for x in range(field.shape[1]):
+        for y in range(field.shape[0]):
+            fieldcopy = field.copy()
+            if field[y][x] == '#':
+                fieldcopy[y][x] = '.'
+            else:
+                fieldcopy[y][x] = '#'
+            changed = checkmirror(fieldcopy, 'h', unchanged[0]), checkmirror(fieldcopy, 'v', unchanged[1])
+            if changed[0] > 0 and changed[0] != unchanged[0]:
+                print("Old: {} New: {}".format(unchanged, changed))
+                #print(changed[0])
+                return changed[0]*100
+            if changed[1] > 0 and changed[1] != unchanged[1]:
+                print("Old: {} New: {}".format(unchanged, changed))
+                #print(changed[1])
+                return changed[1]
+    print("No new reflection found: {}".format(unchanged))
+    return 0
+
+def checkmirror(field,direction='v', old=None):
+    if direction == 'v':
+        for i in range(1,field.shape[1]):
+            if i < field.shape[1]/2:
+                l = i
+            else:
+                l = field.shape[1] - i
+            #print("Left with mirror at {} position {} with size {}:\n {}".format(i,direction,l,field[:, i-l:i]))
+            #print("Right with mirror at {} position {} with size {}:\n {}".format(i,direction ,l,np.flip(field[:, i:i+l],1)))
+            if np.array_equal(field[:, i-l:i],np.flip(field[:, i:i+l],1)):
+                if old and i == old:
+                    #print("Old vertical reflection between {} and {}. Continue".format(i, i+1))
+                    continue
+                else:
+                    #print("Vertical reflection between {} and {}".format(i,i+1))
+                    return i
+    if direction == 'h':
+        for i in range(1, field.shape[0]):
+            if i < field.shape[0] / 2:
+                l = i
+            else:
+                l = field.shape[0] - i
+            #print("Top with mirror at {} position {} with size {}:\n {}".format(i,direction,l,field[i-l:i,:]))
+            #print("Bottom with mirror at {} position {} with size {}:\n {}".format(i,direction ,l,np.flip(field[i:i+l,:],0)))
+            if np.array_equal(field[i - l:i, :], np.flip(field[i:i + l,:], 0)):
+                if old and i == old:
+                    #print("Old horizontal reflection between {} and {}. Continue".format(i, i + 1))
+                    continue
+                else:
+                    #print("Horizontal reflection between {} and {}. Return.".format(i, i + 1))
+                    return i
+    return 0
 
 def part1(data):
     print("---------------------------\nPart1:\n---------------------------")
-    start_time = time.time()
+    answer = 0
     for d in data:
-        True
-    end_time = time.time()
-    print("Answer: {}".format(42))
-    print("Execution took {} milliseconds".format((end_time-start_time)* 1000))
+        answer += checkmirror(d,direction='v')
+        answer += checkmirror(d,direction='h')*100
+    print("Answer: {}".format(answer))
+
 def part2(data):
     print("\n---------------------------\nPart2:\n---------------------------")
-    start_time = time.time()
+    answer = 0
     for d in data:
-        True
-    end_time = time.time()
-    print("Answer: {}".format(42))
-    print("Execution took {} seconds".format((end_time-start_time)* 1000))
+       answer += smudge(d)
+    print("Answer: {}".format(answer))
 
 def run(day,test=False):
     if test:
         data1 = input("day" + day + "/test1.txt")
-        data2 = input("day" + day + "/test1.txt")
+        data2 = input("day" + day + "/test2.txt")
         part1(data1)
         part2(data2)
     else:
