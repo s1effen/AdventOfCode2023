@@ -18,6 +18,7 @@ def input(f):
                 False
     return d
 
+
 def possible(game, bag):
     for hand in game:
         for color in hand.keys():
